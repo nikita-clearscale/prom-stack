@@ -1,11 +1,6 @@
 version: "3"
 services:
 
-  pushgateway:
-    image: prom/pushgateway:v0.4.0
-    ports:
-      - 9091:9091
-
   prometheus:
     image: prom/prometheus:v2.0.0
     command: --config.file=/etc/prometheus/prometheus.yml
@@ -13,7 +8,22 @@ services:
       - 9090:9090
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./prometheus/alerts/:/etc/prometheus/rules.d/
+
+  pushgateway:
+    image: prom/pushgateway
+    ports:
+      - 9091:9091
+
+  afka_exporter:
+    image: danielqsj/kafka-exporter
+    command: --kafka.server=kafka03:9092
+    # aws dns server
+    dns: 10.173.2.9
+    # dns name for kafka servers
+    # use zookeeper API to get dns names for kafka server
+    dns_search: us-west-1a.testdataskope.net
+    ports:
+      - 9308:9308
 
   grafana:
     image: grafana/grafana:4.6.2
