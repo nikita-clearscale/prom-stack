@@ -1,3 +1,0 @@
-# list all metrics
-curl 'http://localhost:9090/api/v1/label/__name__/values?_=1552749776579' >> /home/ubuntu/log.json
-
